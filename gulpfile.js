@@ -42,7 +42,7 @@ gulp.task('jsmin', function() {
 gulp.task('html', function(cb) {
   return gulp.src('app/**/*.html')
     .pipe(gulp.dest('develope'));
-})
+});
 
 gulp.task('clean', function() {
   return del(['develope/**', 'build/**']);
@@ -70,4 +70,13 @@ gulp.task('build', function() {
 
 gulp.task('default', function(cb) {
   sequence('clean', ['imagemin', 'cssmin', 'jsmin', 'html'], 'build', cb);
+});
+
+gulp.task('cleanpsi', function() {
+  return del(['../PSI-test/**', '!../PSI-test', '!../PSI-test/**/*.git*'], {force: true});
+});
+
+gulp.task('psi', ['cleanpsi'], function() {
+  return gulp.src('build/**/*')
+    .pipe(gulp.dest('../PSI-test'));
 });
