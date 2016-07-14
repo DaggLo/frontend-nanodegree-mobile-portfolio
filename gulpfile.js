@@ -1,11 +1,12 @@
-//========================================================//
+﻿//========================================================//
   // ==========   Gulp Config   =============
   // Plugins
   // - gulp-imagemin (Images minification)
   // - gulp-csso (CSS minification)
   // - gulp-uglify (JS minification)
   // - pump (Debugging)
-  // - del (cleaning build directory)
+  // - del (Cleaning directory)
+  // - run-sequence (Runs series of dependent gulp tasks in order)
 //=========================================================//
 
 'use strict';
@@ -15,54 +16,58 @@ var gulp = require('gulp'),
   imageMin = require('gulp-imagemin'),
   jsMin = require('gulp-uglify'),
   pump = require('pump'),
-  del = require('del');
+  del = require('del'),
+  sequence = require('run-sequence');
 
 gulp.task('imagemin', function() {
-  gulp.src('app/**/*.+(jpg|png|svg|jpeg)')
+  return gulp.src('app/**/*.+(jpg|png|svg|jpeg)')
     .pipe(imageMin({progressive: true, interlased: true}))
     .pipe(gulp.dest('develope'));
 });
 
 gulp.task('cssmin', function() {
-  gulp.src('app/**/*.css')
+  return gulp.src('app/**/*.css')
     .pipe(cssMin({sourceMap: true}))
     .pipe(gulp.dest('develope'));
 });
 
 gulp.task('jsmin', function() {
-  pump([
+  return pump([
     gulp.src('app/**/*.js'),
     jsMin(),
     gulp.dest('develope')
   ]);
 });
 
-gulp.task('html', function() {
-  gulp.src('app/**/*.html')
+gulp.task('html', function(cb) {
+  return gulp.src('app/**/*.html')
     .pipe(gulp.dest('develope'));
 })
 
-gulp.task('clean', function(cb) {
-  del(['develope/**']);
-  cb();
+gulp.task('clean', function() {
+  return del(['develope/**', 'build/**']);
 });
 
-gulp.task('dev', ['clean'], function(cb) {
+gulp.task('opti', function(cb) {
+  sequence('clean', ['imagemin', 'cssmin', 'jsmin', 'html'], cb);
+});
+
+gulp.task('dev', ['opti'], function() {
   gulp.watch('app/**/*.+(jpg|png|svg|jpeg)', ['imagemin']);
   gulp.watch('app/**/*.css', ['cssmin']);
   gulp.watch('app/**/*.js', ['jsmin']);
   gulp.watch('app/**/*.html', ['html']);
-  cb();
-  // заменить вызовы задач на кол-бэки.
 });
 
-gulp.task('opti-forced', ['imagemin', 'cssmin', 'jsmin', 'html']);
-
-gulp.task('build', ['opti-forced'], function() {
-  del(['build/**']);
-  gulp.src(['develope/**', '!develope/**/*.css'])
-    .pipe(gulp.dest('build'));
+gulp.task('build', function() {
   gulp.src('app/**/*.css')
     .pipe(cssMin())
     .pipe(gulp.dest('build'));
+
+  return gulp.src(['develope/**/*', '!develope/**/*.css'])
+    .pipe(gulp.dest('build'));
+});
+
+gulp.task('default', function(cb) {
+  sequence('clean', ['imagemin', 'cssmin', 'jsmin', 'html'], 'build', cb);
 });
