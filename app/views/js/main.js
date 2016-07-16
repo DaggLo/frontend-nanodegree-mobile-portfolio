@@ -453,8 +453,8 @@ var resizePizzas = function(size) {
     var randomPizzaContainerNodeList = document.querySelectorAll(".randomPizzaContainer");
     var newwidthArr = [];
 
-    // Two separate loops (first - to read properties, second to write down them) instead one
-    // to reduce forced synchronous layout (FSL).
+    // Two separate loops (first - to read properties, second to write them down) instead one
+    // to avoid forced synchronous layout (FSL).
     for (var i = 0; i < randomPizzaContainerNodeList.length; i++) {
       var dx = determineDx(randomPizzaContainerNodeList[i], size);
       var newwidth = (randomPizzaContainerNodeList[i].offsetWidth + dx) + 'px';
