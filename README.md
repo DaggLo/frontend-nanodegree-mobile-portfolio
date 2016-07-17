@@ -34,7 +34,7 @@ Requirements:
 Installation:
 
 - [Clone](https://github.com/DaggLo/frontend-nanodegree-mobile-portfolio.git) or [download](https://github.com/DaggLo/frontend-nanodegree-mobile-portfolio/archive/master.zip) the repository.
-- In the project directory install all dev-dependences using Node.js command line shell:
+- In the project directory install all dev-dependences using Node.js command line:
 ```
 $ npm install
 ```
