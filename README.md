@@ -15,6 +15,7 @@ This is my project task I've been made during the Udacity Website Performance op
 I've decided not to customize this portfolio yet to make it easier by reviewer to check optimizations made and evaluate my work. 
 
 There is a list of optimizations below made by me:
+
 1. Reduce number of background movingPizzas from 300 to 80 (for managing less layers).
 2. Promote background pizzas onto their own layers to avoid needless painting when scrolling.
 3. Fix forced synchronous layout (FSL) in `changePizzaSizes()` (_/views/js/main.js_).
@@ -31,17 +32,17 @@ Requirements:
 - Also the [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) task runner <span style="text-decoration:underline;">installed globaly</span> is required to perform build tasks.
 
 Installation:
-1. [Clone](https://github.com/DaggLo/frontend-nanodegree-mobile-portfolio.git) or [download](https://github.com/DaggLo/frontend-nanodegree-mobile-portfolio/archive/master.zip) the repository.
-2. In the project directory install all dev-dependences using Node.js command line shell:
 
-    ```
-    $ npm install
-    ```
-3. Run gulp default task:
-    ```
-    $ gulp
-    ```
-4. Final code will be in the __/build__ folder.
+- [Clone](https://github.com/DaggLo/frontend-nanodegree-mobile-portfolio.git) or [download](https://github.com/DaggLo/frontend-nanodegree-mobile-portfolio/archive/master.zip) the repository.
+- In the project directory install all dev-dependences using Node.js command line shell:
+```
+$ npm install
+```
+- Run gulp default task:
+```
+$ gulp
+```
+- Final code will be in the __/build__ folder.
 
 ## Contacts
 some-mail@some-mail-service.com
