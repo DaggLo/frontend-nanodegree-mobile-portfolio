@@ -21,7 +21,7 @@ There is a list of optimizations below made by me:
 3. Fix forced synchronous layout (FSL) in `changePizzaSizes()` (_/views/js/main.js_).
 4. Fix forced synchronous layout (FSL) in `updatePositions()` (_/views/js/main.js_).
 5. Make Google fonts to download asynchronously using [Web Font Loader](https://github.com/typekit/webfontloader).
-6. Move styles from the __/css/styles.css__ into the __index.html__ via `<style>` tag.
+6. Move styles from the <em>/css/styles.css</em> into the <em>index.html</em> via `<style>` tag.
 7. Add `media="print"`attribute to the `<link href="css/print.css" ...>` tag.
 8. Add `async`attribute in the google analytics script.
 
@@ -29,7 +29,7 @@ There is a list of optimizations below made by me:
 ## Installation
 Requirements:
 - You should have the [Node.js](https://nodejs.org/en/) properly installed on your system.
-- Also the [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) task runner <span style="text-decoration:underline;">installed globaly</span> is required to perform build tasks.
+- Also the [gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md) task runner <ins>installed globaly</ins> is required to perform build tasks.
 
 Installation:
 
