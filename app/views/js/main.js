@@ -506,20 +506,20 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
-var items = document.getElementsByClassName('mover');
+var items = document.getElementsByClassName('mover'),
+movingPizzas1 = document.getElementById('movingPizzas1');
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-  
+
   var bodyScrollTop = document.body.scrollTop / 1250;
 
   for (var i = 0; i < items.length; i++) {
     var phase = Math.sin(bodyScrollTop + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
-
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
@@ -531,14 +531,15 @@ function updatePositions() {
   }
 }
 
-// runs updatePositions on scroll
-window.addEventListener('scroll', updatePositions);
+function generateBackgroundPizzas() {
+  var windowWidth = window.innerWidth,
+  windowHeight = document.documentElement.clientHeight,
+  cols = Math.floor(windowWidth / 427) + 1,
+  rows = Math.floor(windowHeight / 427);
+  s = 512,
+  pizzasNumber = cols * rows;
 
-// Generates the sliding pizzas when the page loads.
-document.addEventListener('DOMContentLoaded', function() {
-  var cols = 10;
-  var s = 256;
-  for (var i = 0; i < 80; i++) {
+  for (var i = 0; i < pizzasNumber; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -546,7 +547,25 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "232px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+
+    movingPizzas1.appendChild(elem);
   }
+
   updatePositions();
+}
+
+// runs updatePositions on scroll
+window.addEventListener('scroll', updatePositions);
+
+window.addEventListener('orientationchange', function() {
+  var pzzs = movingPizzas1.childNodes.length;
+
+  for (var i = 0; i < pzzs; i++) {
+    movingPizzas1.removeChild(movingPizzas1.lastChild);
+  }
+
+  setTimeout(generateBackgroundPizzas, 30);
 });
+
+// Generates the sliding pizzas when the page loads.
+document.addEventListener('DOMContentLoaded', generateBackgroundPizzas);
