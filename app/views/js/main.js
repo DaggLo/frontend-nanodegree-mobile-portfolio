@@ -564,7 +564,7 @@ window.addEventListener('orientationchange', function() {
     movingPizzas1.removeChild(movingPizzas1.lastChild);
   }
 
-  setTimeout(generateBackgroundPizzas, 30);
+  requestAnimationFrame(generateBackgroundPizzas);
 });
 
 // Generates the sliding pizzas when the page loads.
