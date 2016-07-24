@@ -511,16 +511,18 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 var items = document.getElementsByClassName('mover'),
 movingPizzas1 = document.getElementById('movingPizzas1'),
 browserVersion = browserDetection(),
-windowWidth = (function() {
+/* windowWidth = (function() {
   var w = window.innerWidth,
   h = document.documentElement.clientHeight;
 
   if (w >= h) {
     return w;
   } else return h;
-})();
-
-windowHeight = windowWidth;
+})(),
+windowHeight = windowWidth; */
+windowWidth = window.innerWidth,
+windowHeight = document.documentElement.clientHeight,
+doOnOrientationChangeTimeout = 0;
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
@@ -565,16 +567,27 @@ function generateBackgroundPizzas() {
   updatePositions();
 }
 
-/* function doOnOrientationChange(event) {
-  switch(true)
-    case: browserVersion === 'isChrome':
-    case: +browserVersion[1] >= 6:
+function doOnOrientationChange() {
+  var h = document.documentElement.clientHeight;
 
-      break;
+  if (h == windowHeight && doOnOrientationChangeTimeout < 10) {
+    doOnOrientationChangeTimeout++;
+    requestAnimationFrame(doOnOrientationChange);
+  } else {
+    var frame = function() {
+      windowWidth = window.innerWidth;
+      windowHeight = document.documentElement.clientHeight;
 
-    default:
-
-} */
+      if (windowHeight != h) {
+        requestAnimationFrame(doOnOrientationChange);
+      } else {
+        requestAnimationFrame(generateBackgroundPizzas);
+        doOnOrientationChangeTimeout = 0;
+      }
+    };
+    requestAnimationFrame(frame);
+  }
+}
 
 function browserDetection() {
   // This code has been taken from here:
@@ -659,7 +672,7 @@ window.addEventListener('orientationchange', function() {
     movingPizzas1.removeChild(movingPizzas1.lastChild);
   }
 
-  requestAnimationFrame(generateBackgroundPizzas);
+  requestAnimationFrame(doOnOrientationChange);
 });
 
 // Generates the sliding pizzas when the page loads.
