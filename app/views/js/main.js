@@ -510,7 +510,17 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 
 var items = document.getElementsByClassName('mover'),
 movingPizzas1 = document.getElementById('movingPizzas1'),
-browserVersion = browserDetection();
+browserVersion = browserDetection(),
+windowWidth = (function() {
+  var w = window.innerWidth,
+  h = document.documentElement.clientHeight;
+
+  if (w >= h) {
+    return w;
+  } else return h;
+})();
+
+windowHeight = windowWidth;
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
@@ -535,9 +545,7 @@ function updatePositions() {
 }
 
 function generateBackgroundPizzas() {
-  var windowWidth = window.innerWidth,
-  windowHeight = document.documentElement.clientHeight,
-  cols = Math.floor(windowWidth / 427) + 1,
+  var cols = Math.floor(windowWidth / 427) + 1,
   rows = Math.floor(windowHeight / 427);
   s = 512,
   pizzasNumber = cols * rows;
@@ -557,8 +565,16 @@ function generateBackgroundPizzas() {
   updatePositions();
 }
 
-function doOnOrientationChange() {
-}
+/* function doOnOrientationChange(event) {
+  switch(true)
+    case: browserVersion === 'isChrome':
+    case: +browserVersion[1] >= 6:
+
+      break;
+
+    default:
+
+} */
 
 function browserDetection() {
   // This code has been taken from here:
