@@ -509,7 +509,8 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
 var items = document.getElementsByClassName('mover'),
-movingPizzas1 = document.getElementById('movingPizzas1');
+movingPizzas1 = document.getElementById('movingPizzas1'),
+browserVersion = browserDetection();
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
@@ -554,6 +555,82 @@ function generateBackgroundPizzas() {
   }
 
   updatePositions();
+}
+
+function doOnOrientationChange() {
+}
+
+function browserDetection() {
+  // This code has been taken from here:
+  // http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+  // Start:
+    // Opera 8.0+
+  var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+      // Firefox 1.0+
+  var isFirefox = typeof InstallTrigger !== 'undefined';
+      // At least Safari 3+: "[object HTMLElementConstructor]"
+  var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
+      // Internet Explorer 6-11
+  var isIE = /*@cc_on!@*/false || !!document.documentMode;
+      // Edge 20+
+  var isEdge = !isIE && !!window.StyleMedia;
+      // Chrome 1+
+  var isChrome = !!window.chrome && !!window.chrome.webstore;
+      // Blink engine detection
+  var isBlink = (isChrome || isOpera) && !!window.CSS;
+  // End
+
+  switch(true) {
+    case isOpera:
+      console.log('isOpera');
+      return 'isOpera';
+      break;
+
+    case isFirefox:
+      // This idea has been taken (and changed a bit) form here:
+      // http://stackoverflow.com/questions/5916900/how-can-you-detect-the-version-of-a-browser
+      var tem,
+      ua = navigator.userAgent,
+      M = ua.match(/(firefox)\/?\s*(\d+)/i) || [],
+      browser = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+
+      if ((tem=ua.match(/version\/(\d+)/i))!=null) {
+        browser.splice(1, 1, tem[1]);
+      }
+      console.log('isFirefox ' + browser[1]);
+
+      return browser;
+      break;
+
+    case isSafari:
+      console.log('isSafari');
+      return 'isSafari';
+      break;
+
+    case isIE:
+      console.log('isIE');
+      return 'isIE';
+      break;
+
+    case isEdge:
+      console.log('isEdge');
+      return 'isEdge';
+      break;
+
+    case isChrome:
+      console.log('isChrome');
+      return 'isChrome';
+      break;
+
+    case isBlink:
+      console.log('isBlink');
+      return 'isBlink';
+      break;
+
+    default:
+      console.log('default');
+      return 'isChrome';
+  }
 }
 
 // runs updatePositions on scroll
