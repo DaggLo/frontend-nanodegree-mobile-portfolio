@@ -529,7 +529,7 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var bodyScrollTop = document.body.scrollTop / 1250;
+  var bodyScrollTop = window.pageYOffset / 1250;
 
   for (var i = 0; i < items.length; i++) {
     var phase = Math.sin(bodyScrollTop + (i % 5));
