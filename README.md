@@ -32,7 +32,7 @@ $ npm install
 ```
 $ gulp
 ```
-- Final code will be in the _/build_ folder.
+- Final code will be in the _/build_ folder. Source code is in the _/app_ folder.
 
 ## Contacts
 some-mail@some-mail-service.com
