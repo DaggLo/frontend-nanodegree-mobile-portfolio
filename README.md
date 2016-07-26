@@ -9,22 +9,12 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Decription
+## Description
 This is my project task I've been made during the Udacity Website Performance optimization course.
 
 I've decided not to customize this portfolio yet to make it easier by reviewer to check optimizations made and evaluate my work. 
 
-There is a list of optimizations below made by me:
-
-1. Reduce number of background movingPizzas from 300 to 80 (for managing less layers).
-2. Promote background pizzas onto their own layers to avoid needless painting when scrolling.
-3. Fix forced synchronous layout (FSL) in `changePizzaSizes()` (_/views/js/main.js_).
-4. Fix forced synchronous layout (FSL) in `updatePositions()` (_/views/js/main.js_).
-5. Make Google fonts to download asynchronously using [Web Font Loader](https://github.com/typekit/webfontloader).
-6. Move styles from the <em>/css/styles.css</em> into the <em>index.html</em> via `<style>` tag.
-7. Add `media="print"`attribute to the `<link href="css/print.css" ...>` tag.
-8. Add `async`attribute in the google analytics script.
-
+A list of optimizations made by me is __[here](https://nodejs.org/en/)__:
 
 ## Installation
 Requirements:
