@@ -10,11 +10,11 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Description
-This is my project task I've been made during the Udacity Website Performance optimization course.
+This is my project task I've been making during the Udacity Website Performance optimization course.
 
 I've decided not to customize this portfolio yet to make it easier by reviewer to check optimizations made and evaluate my work. 
 
-A list of optimizations made by me is __[here](https://nodejs.org/en/)__:
+The list of optimizations made by me is __[here](frontend-nanodegree-mobile-portfolio/List of optimizations.md)__:
 
 ## Installation
 Requirements:
