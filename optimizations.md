@@ -1,4 +1,4 @@
-# List of optimizations.
+# The list of optimizations.
 
 ## /index.html
 1. Make Google fonts to download asynchronously using [Web Font Loader](https://github.com/typekit/webfontloader).
