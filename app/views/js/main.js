@@ -505,30 +505,38 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
   console.log("Average time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
-// The following code for sliding background pizzas was pulled from Ilya's demo found at:
-// https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
+// Variables I've made or taken out in a global scope from different functions.
 
+// This one was taken out from the updatePositions() because there is really
+// no need for gathering a new collection each time the function is called.
+// Besides that the collection is "live" means that it updates itself in real-time.
 var items = document.getElementsByClassName('mover'),
-movingPizzas1 = document.getElementById('movingPizzas1'),
-browserVersion = browserDetection(),
-/* windowWidth = (function() {
-  var w = window.innerWidth,
-  h = document.documentElement.clientHeight;
 
-  if (w >= h) {
-    return w;
-  } else return h;
-})(),
-windowHeight = windowWidth; */
+// This one is here for same reason as the above one and transfered from
+// the generateBackgroundPizzas().
+movingPizzas1 = document.getElementById('movingPizzas1'),
+
+// This one is meant to store browser type and version.
+browserVersion = browserDetection(),
+
+// Stores the viewport dimensions.
 windowWidth = window.innerWidth,
 windowHeight = document.documentElement.clientHeight,
+
+// A timeout for the doOnOrientationChange() doesn't wait for too long
+// in some scenarios.
 doOnOrientationChangeTimeout = 0;
+
+// The following code for sliding background pizzas was pulled from Ilya's demo found at:
+// https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
+  // Replaced on window.pageYOffset instead scrollTop because of incorrect behavior
+  // in other browsers besides Chrome.
   var bodyScrollTop = window.pageYOffset / 1250;
 
   for (var i = 0; i < items.length; i++) {
@@ -546,6 +554,15 @@ function updatePositions() {
   }
 }
 
+// This one generates background pizzas and appends them to a page.
+// Was noticeably changed and refactored compared to original one
+// to improve performance.
+// 1) Gathering collections of DOM (movingPizzas1) elements were taken out
+// into a global scope. Furthermore it eliminated the forced synchronous layout (FSL).
+// 2) The number of generated background pizzas is reduced and depends on
+// viewport size (less layer management for browser).
+// 3) The pizzas sizes were returned to a native ones for the partly visual compensation
+// of their quantity reducing.
 function generateBackgroundPizzas() {
   var cols = Math.floor(windowWidth / 427) + 1,
   rows = Math.floor(windowHeight / 427);
@@ -567,9 +584,22 @@ function generateBackgroundPizzas() {
   updatePositions();
 }
 
+// This one handles the orientationchange event. Especially it checks
+// if the real dimensions of a viewport have changed and if so -
+// updates variables respectively and calls generateBackgroundPizzas().
+
+// This feature was introduced because of not all devices can perform real changing of
+// device view (portrait or landscape) fast enough for correctly updating of a background
+// pizzas number that I've supposed to use as a performance optimization. So it is not
+// sufficient approach just to trigger reading of new viewport width/height and
+// generateBackgroundPizzas() by the appropriate event.
 function doOnOrientationChange() {
   var h = document.documentElement.clientHeight;
 
+  // TODO:
+  // 1) var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+  //     var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+  // 2) if (doOnOrientationChangeTimeout == 10)
   if (h == windowHeight && doOnOrientationChangeTimeout < 10) {
     doOnOrientationChangeTimeout++;
     requestAnimationFrame(doOnOrientationChange);
@@ -589,6 +619,14 @@ function doOnOrientationChange() {
   }
 }
 
+// This one serves for browser detection.
+// Earlier I supposed to use it as a part of DeviceOrientationEvent handling procedure.
+// I planned to use event.gamma property to utilize a device rotation and regenerate
+// background pizzas according to new viewport size. But then I realized that this
+// process must be combined with the real screen rotation and shouldn't be carried
+// in isolation.
+// So this way this function aren't doing any critical work now but console.log the
+// browser version.
 function browserDetection() {
   // This code has been taken from here:
   // http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
@@ -665,6 +703,7 @@ function browserDetection() {
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
+// This removes old background pizzas and call to generate new ones.
 window.addEventListener('orientationchange', function() {
   var pzzs = movingPizzas1.childNodes.length;
 
