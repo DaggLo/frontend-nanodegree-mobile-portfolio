@@ -519,9 +519,9 @@ movingPizzas1 = document.getElementById('movingPizzas1'),
 // This one is meant to store browser type and version.
 browserVersion = browserDetection(),
 
-// Stores the viewport dimensions.
-windowWidth = window.innerWidth,
-windowHeight = document.documentElement.clientHeight,
+// Stores viewport dimensions.
+windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
 
 // A timeout for the doOnOrientationChange() doesn't wait for too long
 // in some scenarios.
@@ -594,22 +594,42 @@ function generateBackgroundPizzas() {
 // sufficient approach just to trigger reading of new viewport width/height and
 // generateBackgroundPizzas() by the appropriate event.
 function doOnOrientationChange() {
-  var h = document.documentElement.clientHeight;
+  var pzzs = movingPizzas1.childNodes.length,
+  h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-  // TODO:
-  // 1) var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
-  //     var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-  // 2) if (doOnOrientationChangeTimeout == 10)
-  if (h == windowHeight && doOnOrientationChangeTimeout < 10) {
+  // Removes old pizzas from the page.
+  for (var i = 0; i < pzzs; i++) {
+    movingPizzas1.removeChild(movingPizzas1.lastChild);
+  }
+
+  // Checks if actual viewport height changes. If still not - do another try.
+  if (h == windowHeight && doOnOrientationChangeTimeout <= 10) {
+
+    // If count of tryies reaches max value - decide that windowWidth and
+    // windowHeight should be equal and maximized to avoid incorrect
+    // quantity of background pizzas.
+    if (doOnOrientationChangeTimeout == 10) {
+      windowWidth = Math.max(windowWidth, windowHeight);
+      windowHeight = windowWidth;
+      console.log('An issue with the device orientation changing.');
+      requestAnimationFrame(generateBackgroundPizzas);
+      return;
+    }
+
     doOnOrientationChangeTimeout++;
     requestAnimationFrame(doOnOrientationChange);
+
   } else {
     var frame = function() {
-      windowWidth = window.innerWidth;
-      windowHeight = document.documentElement.clientHeight;
+      windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
+      // If the orientation change starts but not finished - do another try.
+      // Notice that there are compared the same values but from the different
+      // frames (because of requestAnimationFrame(frame)).
       if (windowHeight != h) {
         requestAnimationFrame(doOnOrientationChange);
+
       } else {
         requestAnimationFrame(generateBackgroundPizzas);
         doOnOrientationChangeTimeout = 0;
@@ -703,16 +723,8 @@ function browserDetection() {
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
-// This removes old background pizzas and call to generate new ones.
-window.addEventListener('orientationchange', function() {
-  var pzzs = movingPizzas1.childNodes.length;
-
-  for (var i = 0; i < pzzs; i++) {
-    movingPizzas1.removeChild(movingPizzas1.lastChild);
-  }
-
-  requestAnimationFrame(doOnOrientationChange);
-});
+// Generates the new background pizzas when device orientation changes.
+window.addEventListener('orientationchange', doOnOrientationChange);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', generateBackgroundPizzas);
