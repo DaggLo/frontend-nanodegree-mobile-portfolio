@@ -425,8 +425,9 @@ var resizePizzas = function(size) {
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
 
-    // Change from querySelector to getElementById.
-    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
+    // Change from querySelector to getElementById and moved out to
+    // the global variable randomPizzas.
+    var windowWidth = randomPizzas.offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // TODO: change to 3 sizes? no more xl?
@@ -482,9 +483,10 @@ var resizePizzas = function(size) {
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
-// This for-loop actually creates and appends all of the pizzas when the page loads
+// This for-loop actually creates and appends all of the pizzas when the page loads.
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
+  // getElementById was moved out to the global variable randomPizzas.
+  var pizzasDiv = randomPizzas;
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -521,6 +523,9 @@ movingPizzas1 = document.getElementById('movingPizzas1'),
 
 // This one is moved out of changePizzaSizes().
 randomPizzaContainerNodeList = document.getElementsByClassName("randomPizzaContainer"),
+
+// Moved out of determineDx and random pizzas geheration for-loop.
+randomPizzas = document.getElementById("randomPizzas"),
 
 // This one is meant to store browser type and version.
 browserVersion = browserDetection(),
