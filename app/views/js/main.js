@@ -512,20 +512,27 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // Besides that the collection is "live" means that it updates itself in real-time.
 var items = document.getElementsByClassName('mover'),
 
-// This one is here for same reason as the above one and transfered from
+// This one is here for same reason as the above one. Transfered from
 // the generateBackgroundPizzas().
 movingPizzas1 = document.getElementById('movingPizzas1'),
 
 // This one is meant to store browser type and version.
 browserVersion = browserDetection(),
 
-// Stores viewport dimensions.
+// These variables store a viewport dimensions. They are used in the
+// generateBackgroundPizzas() and updated in the doOnOrientationChange().
 windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
 windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
 
 // A timeout for the doOnOrientationChange() doesn't wait for too long
 // in some scenarios.
-doOnOrientationChangeTimeout = 0;
+doOnOrientationChangeTimeout = 0,
+
+// This is a dependency ratio that keeps the inital relation of columns and background
+// pizzas starting phases (8 (initial cols number in the generateBackgroundPizzas())
+// : 5 (initial remainder in the updatePositions()) to avoid their cophased movings
+// on some viewports.
+phaseSync;
 
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
@@ -540,7 +547,7 @@ function updatePositions() {
   var bodyScrollTop = window.pageYOffset / 1250;
 
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(bodyScrollTop + (i % 5));
+    var phase = Math.sin(bodyScrollTop + (i % phaseSync));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -554,27 +561,29 @@ function updatePositions() {
   }
 }
 
-// This one generates background pizzas and appends them to a page.
-// Was noticeably changed and refactored compared to original one
-// to improve performance.
+// This one generates background pizzas and appends them on the main page.
+// It was transfered to here from the DOMContentLoaded event listener
+// at the bottom of this script and was noticeably changed and refactored
+// compared to original one to improve app performance.
 // 1) Gathering collections of DOM (movingPizzas1) elements were taken out
 // into a global scope. Furthermore it eliminated the forced synchronous layout (FSL).
-// 2) The number of generated background pizzas is reduced and depends on
-// viewport size (less layer management for browser).
-// 3) The pizzas sizes were returned to a native ones for the partly visual compensation
-// of their quantity reducing.
+// 2) The number of generated background pizzas is not fixed now and depends on
+// viewport size (less layer management for a browser). Moreover, this number
+// depends on not only the viewport's height but also the width.
 function generateBackgroundPizzas() {
-  var cols = Math.floor(windowWidth / 427) + 1,
-  rows = Math.floor(windowHeight / 427);
-  s = 512,
+  var s = 256,
+  cols = Math.floor(windowWidth / s + 0.390625) + 1,
+  rows = Math.floor(windowHeight / s) +1,
   pizzasNumber = cols * rows;
+
+  phaseSync = cols / 1.6;
 
   for (var i = 0; i < pizzasNumber; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
-    elem.style.height = "300px";
-    elem.style.width = "232px";
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
 
