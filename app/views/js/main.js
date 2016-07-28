@@ -556,12 +556,16 @@ function updatePositions() {
   // Replaced on window.pageYOffset instead scrollTop because of incorrect behavior
   // in other browsers besides Chrome.
   var bodyScrollTop = window.pageYOffset / 1250,
+
+  // A cache for the loop below.
   phase = [];
 
+  // Move out phase calculations from for-loop below and implement phase caching.
   for (var j = 0; j < phaseSync; j++) {
     phase.push(Math.sin(bodyScrollTop + (j % phaseSync)));
   }
 
+  // Moves background pizzas.
   for (var i = 0; i < items.length; i++) {
     items[i].style.left = items[i].basicLeft + 100 * phase[i % phaseSync] + 'px';
   }
