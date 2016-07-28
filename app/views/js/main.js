@@ -450,23 +450,24 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    var randomPizzaContainerNodeList = document.querySelectorAll(".randomPizzaContainer");
-    var newWidthArr = [];
 
-    // Two separate loops (first - to read properties, second to write them down) instead one
-    // to avoid forced synchronous layout (FSL).
-    for (var i = 0; i < randomPizzaContainerNodeList.length; i++) {
-      var dx = determineDx(randomPizzaContainerNodeList[i], size);
-      var newWidth = (randomPizzaContainerNodeList[i].offsetWidth + dx) + 'px';
-      newWidthArr.push(newWidth);
-    }
+    // All document.querySelectorAll(".randomPizzaContainer") calls were placed in
+    // randomPizzaContainerNodeList and moved out to the global scope. Because this collection
+    // is unchangeable and there is no need of recollect it multiple times each function call.
+    // Also a method is changed to getElementsByClassName().
+    // var randomPizzaContainerNodeList = document.querySelectorAll(".randomPizzaContainer"),
+
+    // dx and newWidth definitions are moved out of for-loop.Because they determine randomPizzas
+    // sizes that are the same for all ones. So we can just use only one value.
+    var dx = determineDx(randomPizzaContainerNodeList[0], size),
+    newWidth = (randomPizzaContainerNodeList[0].offsetWidth + dx) + 'px';
 
     for (i = 0; i < randomPizzaContainerNodeList.length; i++) {
-      randomPizzaContainerNodeList[i].style.width = newWidthArr[i];
+      randomPizzaContainerNodeList[i].style.width = newWidth;
     }
   }
 
-  requestAnimationFrame(function() {
+  window.requestAnimationFrame(function() {
     changePizzaSizes(size);
   });
 
@@ -515,6 +516,9 @@ var items = document.getElementsByClassName('mover'),
 // This one is here for same reason as the above one. Transfered from
 // the generateBackgroundPizzas().
 movingPizzas1 = document.getElementById('movingPizzas1'),
+
+// This one is moved out of changePizzaSizes().
+randomPizzaContainerNodeList = document.getElementsByClassName("randomPizzaContainer"),
 
 // This one is meant to store browser type and version.
 browserVersion = browserDetection(),
