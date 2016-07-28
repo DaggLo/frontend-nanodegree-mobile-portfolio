@@ -483,6 +483,9 @@ var resizePizzas = function(size) {
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
+// Moved out of determineDx and random pizzas geheration for-loop.
+var randomPizzas = document.getElementById("randomPizzas");
+
 // This for-loop actually creates and appends all of the pizzas when the page loads.
 for (var i = 2; i < 100; i++) {
   // getElementById was moved out to the global variable randomPizzas.
@@ -524,9 +527,6 @@ movingPizzas1 = document.getElementById('movingPizzas1'),
 // This one is moved out of changePizzaSizes().
 randomPizzaContainerNodeList = document.getElementsByClassName("randomPizzaContainer"),
 
-// Moved out of determineDx and random pizzas geheration for-loop.
-randomPizzas = document.getElementById("randomPizzas"),
-
 // This one is meant to store browser type and version.
 browserVersion = browserDetection(),
 
@@ -555,11 +555,15 @@ function updatePositions() {
 
   // Replaced on window.pageYOffset instead scrollTop because of incorrect behavior
   // in other browsers besides Chrome.
-  var bodyScrollTop = window.pageYOffset / 1250;
+  var bodyScrollTop = window.pageYOffset / 1250,
+  phase = [];
+
+  for (var j = 0; j < phaseSync; j++) {
+    phase.push(Math.sin(bodyScrollTop + (j % phaseSync)));
+  }
 
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(bodyScrollTop + (i % phaseSync));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    items[i].style.left = items[i].basicLeft + 100 * phase[i % phaseSync] + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -587,7 +591,7 @@ function generateBackgroundPizzas() {
   rows = Math.floor(windowHeight / s) +1,
   pizzasNumber = cols * rows;
 
-  phaseSync = cols / 1.6;
+  phaseSync = Math.floor(cols / 1.6);
 
   for (var i = 0; i < pizzasNumber; i++) {
     var elem = document.createElement('img');
