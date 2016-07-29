@@ -567,7 +567,8 @@ function updatePositions() {
 
   // Moves background pizzas.
   for (var i = 0; i < items.length; i++) {
-    items[i].style.left = items[i].basicLeft + 100 * phase[i % phaseSync] + 'px';
+    // items[i].style.left = items[i].basicLeft + 100 * phase[i % phaseSync] + 'px';
+    items[i].style.transform = 'translate3d(' + (100 * phase[i % phaseSync]) + 'px, 0, 0)';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -603,7 +604,8 @@ function generateBackgroundPizzas() {
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * s;
+    // elem.basicLeft = (i % cols) * s;
+    elem.style.left = (i % cols) * s + 'px';
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
 
     movingPizzas1.appendChild(elem);
