@@ -458,10 +458,9 @@ var resizePizzas = function(size) {
     // randomPizzaContainerNodeList and moved out to the global scope. Because this collection
     // is unchangeable and there is no need of recollect it multiple times each function call.
     // Also a method is changed to getElementsByClassName().
-    // var randomPizzaContainerNodeList = document.querySelectorAll(".randomPizzaContainer"),
 
-    // dx and newWidth definitions are moved out of for-loop.Because they determine randomPizzas
-    // sizes that are the same for all ones. So we can just use only one value.
+    // dx and newWidth definitions are moved out of for-loop. Because they determine randomPizzas
+    // sizes that are the same for all ones. So we can just use only for example first value.
     var dx = determineDx(randomPizzaContainerNodeList[0], size),
     newWidth = (randomPizzaContainerNodeList[0].offsetWidth + dx) + 'px';
 
@@ -470,6 +469,7 @@ var resizePizzas = function(size) {
     }
   }
 
+  // Add window.requestAnimationFrame for that function call.
   window.requestAnimationFrame(function() {
     changePizzaSizes(size);
   });
@@ -567,9 +567,10 @@ function updatePositions() {
 
   // Moves background pizzas.
   // Tried transform: translate3d instaed style.left.
+  // Items collection is moved out to the global variable.
   for (var i = 0; i < items.length; i++) {
     // items[i].style.left = items[i].basicLeft + 100 * phase[i % phaseSync] + 'px';
-    items[i].style.transform = 'translate3d(' + (100 * phase[i % phaseSync]) + 'px, 0, 0)';
+    items[i].style.transform = 'translate3d(' + 100 * phase[i % phaseSync] + 'px, 0, 0)';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.

@@ -34,7 +34,7 @@ form {
   width: 256px;
   z-index: -1;
 
-  /* Add these properties. */
+  /* Add these properties to reduce paint and trigger gpu assistance. */
   will-change: transform;
   -webkit-backface-visibility: hidden;
                backface-visibility: hidden;
