@@ -566,6 +566,7 @@ function updatePositions() {
   }
 
   // Moves background pizzas.
+  // Tried transform: translate3d instaed style.left.
   for (var i = 0; i < items.length; i++) {
     // items[i].style.left = items[i].basicLeft + 100 * phase[i % phaseSync] + 'px';
     items[i].style.transform = 'translate3d(' + (100 * phase[i % phaseSync]) + 'px, 0, 0)';

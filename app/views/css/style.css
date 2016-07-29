@@ -33,6 +33,8 @@ form {
   position: fixed;
   width: 256px;
   z-index: -1;
+
+  /* Add these properties. */
   will-change: transform;
   -webkit-backface-visibility: hidden;
                backface-visibility: hidden;
