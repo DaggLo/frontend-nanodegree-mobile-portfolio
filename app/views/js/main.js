@@ -751,7 +751,9 @@ function browserDetection() {
 }
 
 // runs updatePositions on scroll
-window.addEventListener('scroll', updatePositions);
+window.addEventListener('scroll', function() {
+  window.requestAnimationFrame(updatePositions);
+});
 
 // Generates the new background pizzas when device orientation changes.
 window.addEventListener('orientationchange', doOnOrientationChange);
