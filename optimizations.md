@@ -16,11 +16,11 @@
   * Added `window.requestAnimationFrame` for `changePizzaSizes` call.
 
 #### 2. Main pizzas generation.
-  * `document.getElementById("randomPizzas")` was moved out from the for-loop that creates and appends all of the pizzas when the page loads to the global variable `randomPizzas`.
+  * `document.getElementById("randomPizzas")` was moved to the global variable `randomPizzas` from the for-loop that creates and appends all of the pizzas when the page loads.
 
 #### 3. Background pizzas generation.
   * Refactor: background pizzas generation function is moved out of `DOMContentLoadedEventListener` to the global scope (`generateBackgroundPizzas`).
-  * The number of the background movingPizzas is reduced from 300 to the value that depends on a device viewport (for managing less layers). `orientationchangeEvent` is also taken into account and handled by  `doOnOrientationChange`.
+  * The number of the background movingPizzas is reduced from 300 to the value that depends on a device viewport (for managing less layers). `orientationchangeEvent` is also taken into account and handled by  `doOnOrientationChange()`.
 
 #### 4. UpdatePositions.
   * Reading of the `window.scrollTop` property is puted outside the loop. There is no need of reading this property each time the loop iterates. Also the `window.scrollTop` is replaced on the `window.pageYOffset` because of incorrect behavior in other browsers besides Chrome.
