@@ -633,7 +633,7 @@ function doOnOrientationChange() {
     movingPizzas1.removeChild(movingPizzas1.lastChild);
   }
 
-  // Checks if actual viewport height changes. If still not - do another try.
+  // Checks is actual viewport height changed. If still not - do another try.
   if (h == windowHeight && doOnOrientationChangeTimeout <= 10) {
 
     // If count of tryies reaches max value - decide that windowWidth and
@@ -642,7 +642,7 @@ function doOnOrientationChange() {
     if (doOnOrientationChangeTimeout == 10) {
       windowWidth = Math.max(windowWidth, windowHeight);
       windowHeight = windowWidth;
-      console.log('An issue with the device orientation changing.');
+      console.log('An issue with device orientation handling.');
       window.requestAnimationFrame(generateBackgroundPizzas);
       return;
     }
@@ -659,9 +659,7 @@ function doOnOrientationChange() {
       doOnOrientationChangeTimeout = 0;
     };
 
-    // If the orientation change starts but not finished - do another try.
-    // Notice that there are compared the same values but from the different
-    // frames (because of requestAnimationFrame(frame)).
+    // If orientation change is started but not finished - do another try.
     if (h != Math.max(document.documentElement.clientHeight, window.innerHeight || 0)) {
       window.requestAnimationFrame(doOnOrientationChange);
 
