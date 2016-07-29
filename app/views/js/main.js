@@ -640,30 +640,31 @@ function doOnOrientationChange() {
       windowWidth = Math.max(windowWidth, windowHeight);
       windowHeight = windowWidth;
       console.log('An issue with the device orientation changing.');
-      requestAnimationFrame(generateBackgroundPizzas);
+      window.requestAnimationFrame(generateBackgroundPizzas);
       return;
     }
 
     doOnOrientationChangeTimeout++;
-    requestAnimationFrame(doOnOrientationChange);
+    window.requestAnimationFrame(doOnOrientationChange);
 
   } else {
     var frame = function() {
       windowWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
       windowHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-      // If the orientation change starts but not finished - do another try.
-      // Notice that there are compared the same values but from the different
-      // frames (because of requestAnimationFrame(frame)).
-      if (windowHeight != h) {
-        requestAnimationFrame(doOnOrientationChange);
-
-      } else {
-        requestAnimationFrame(generateBackgroundPizzas);
-        doOnOrientationChangeTimeout = 0;
-      }
+      window.requestAnimationFrame(generateBackgroundPizzas);
+      doOnOrientationChangeTimeout = 0;
     };
-    requestAnimationFrame(frame);
+
+    // If the orientation change starts but not finished - do another try.
+    // Notice that there are compared the same values but from the different
+    // frames (because of requestAnimationFrame(frame)).
+    if (h != Math.max(document.documentElement.clientHeight, window.innerHeight || 0)) {
+      window.requestAnimationFrame(doOnOrientationChange);
+
+    } else {
+      window.requestAnimationFrame(frame);
+    }
   }
 }
 
