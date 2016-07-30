@@ -1,4 +1,5 @@
 'use strict';
+//The 'use strict' added.
 
 /*
 Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
@@ -404,7 +405,8 @@ var pizzaElementGenerator = function(i) {
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API function
 
-  // Changes the value for the size of the pizza above the slider
+  // Changes the value for the size of the pizza above the slider.
+  // document.querySelectors replaced to getElementById.
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
@@ -466,6 +468,8 @@ var resizePizzas = function(size) {
     var dx = determineDx(randomPizzaContainerNodeList[0], size),
     newWidth = (randomPizzaContainerNodeList[0].offsetWidth + dx) + 'px';
 
+    // randomPizzaContainerNodeList.length is save to a local variable in the condition statement of
+    // for-loop.
     for (var i = 0, len = randomPizzaContainerNodeList.length; i < len; i++) {
       randomPizzaContainerNodeList[i].style.width = newWidth;
     }
@@ -595,6 +599,8 @@ function updatePositions() {
 // viewport size (less layer management for a browser). Moreover, this number
 // depends on not only the viewport's height but also the width.
 function generateBackgroundPizzas() {
+  // Declaring the elem variable was taked out of for-loop to avoid it creation
+  // every loop iteration.
   var elem,
   s = 256,
   cols = Math.floor(windowWidth / s + 0.390625) + 1,
