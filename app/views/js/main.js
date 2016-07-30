@@ -595,7 +595,8 @@ function updatePositions() {
 // viewport size (less layer management for a browser). Moreover, this number
 // depends on not only the viewport's height but also the width.
 function generateBackgroundPizzas() {
-  var s = 256,
+  var elem,
+  s = 256,
   cols = Math.floor(windowWidth / s + 0.390625) + 1,
   rows = Math.floor(windowHeight / s) +1,
   pizzasNumber = cols * rows;
@@ -603,7 +604,7 @@ function generateBackgroundPizzas() {
   phaseSync = Math.floor(cols / 1.6);
 
   for (var i = 0; i < pizzasNumber; i++) {
-    var elem = document.createElement('img');
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
